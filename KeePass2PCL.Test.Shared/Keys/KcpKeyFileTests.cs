@@ -38,7 +38,7 @@ namespace KeePass2PCL.Test.Shared.Keys
         0x31, 0xAA, 0x14, 0x3D, 0x95, 0xBF, 0x63, 0xFF
       };
 
-      var fullPath = Path.GetFullPath (testCreateFile);
+      var fullPath = Path.Combine(Path.GetTempPath(), testCreateFile);
       using (var fs = new FileStream(fullPath, FileMode.Create)) {
         using (var sw = new StreamWriter(fs)) {
           sw.Write (expectedFileStart);
@@ -59,13 +59,13 @@ namespace KeePass2PCL.Test.Shared.Keys
     [Test ()]
     public void TestCreate ()
     {
-      var fullPath = Path.GetFullPath (testCreateFile);
+      var fullPath = Path.Combine(Path.GetTempPath(), testCreateFile);
       KcpKeyFile.Create (fullPath, null);
       try {
         var fileContents = File.ReadAllText (fullPath);
         Assert.That (fileContents.Length, Is.EqualTo (187));
-        Assert.That (fileContents, Is.StringStarting (expectedFileStart));
-        Assert.That (fileContents, Is.StringEnding (expectedFileEnd));
+        Assert.That (fileContents, Does.StartWith (expectedFileStart));
+        Assert.That (fileContents, Does.EndWith (expectedFileEnd));
       } finally {
         File.Delete (fullPath);
       }

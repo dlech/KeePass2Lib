@@ -30,24 +30,5 @@ namespace KeePass2PCL.Test.Shared.Keys
       var keyData = key.ReadData ();
       Assert.That (keyData, Is.EqualTo (expectedKey));
     }
-
-    [Test ()]
-    public void TestTransformKeyManaged ()
-    {
-      var originalKey = new byte[32];
-      var expectedKey = new byte[32] {
-        0xDC, 0x95, 0xC0, 0x78, 0xA2, 0x40, 0x89, 0x89,
-        0xAD, 0x48, 0xA2, 0x14, 0x92, 0x84, 0x20, 0x87,
-        0xDC, 0x95, 0xC0, 0x78, 0xA2, 0x40, 0x89, 0x89,
-        0xAD, 0x48, 0xA2, 0x14, 0x92, 0x84, 0x20, 0x87
-      };
-      var seed = new byte[32];
-      const ulong rounds = 1;
-
-      var managedKey = (byte[])originalKey.Clone ();
-      var success = CompositeKey.TransformKeyManaged (managedKey, seed, rounds);
-      Assert.That (success, Is.True);
-      Assert.That (managedKey, Is.EqualTo (expectedKey));
-    }
   }
 }
