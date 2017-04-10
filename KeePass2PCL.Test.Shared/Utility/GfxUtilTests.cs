@@ -27,11 +27,6 @@ namespace KeePass2PCL.Test.Shared.Utility
             var image = GfxUtil.LoadImage (testData);
             Assert.That (image.Width, Is.EqualTo (16));
             Assert.That (image.Height, Is.EqualTo (16));
-#if !KeePassLib
-            var nativeImage = image.ToNative ();
-            Assert.That (nativeImage.Width, Is.EqualTo (16));
-            Assert.That (nativeImage.Height, Is.EqualTo (16));
-#endif
         }
     }
 }

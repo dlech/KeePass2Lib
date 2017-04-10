@@ -2,7 +2,3 @@
 	path = KeePassLib
 	url = git://github.com/dlech/KeePass2PCL
 	branch = upstream-test
-[submodule "KeePass2PCL"]
-	path = KeePass2PCL
-	url = git://github.com/dlech/KeePass2PCL
-	branch = pcl
