@@ -11,7 +11,7 @@ namespace KeePass2PCL.Test.UWP
     public class PwDatabaseTests
     {
         [TestMethod]
-        public void Open_Test()
+        public void Open_With_Wrong_Password_Test()
         {
             IFolder folder = SpecialFolder.Current.Local;
             IFolder testData = folder.CreateFolderAsync("TestData",
@@ -43,6 +43,33 @@ namespace KeePass2PCL.Test.UWP
                 wasException = true;
             }
             Assert.IsTrue(wasException);
+            file.DeleteAsync().Wait();
+            testData.DeleteAsync().Wait();
+        }
+
+        [TestMethod]
+        public void New_Test()
+        {
+            IFolder folder = SpecialFolder.Current.Local;
+            IFolder testData = folder.CreateFolderAsync("TestData",
+                CreationCollisionOption.OpenIfExists).Result;
+            IFile file = testData.CreateFileAsync("1.kdbx",
+                CreationCollisionOption.ReplaceExisting).Result;
+
+            var ci = new IOConnectionInfo();
+            ci.Path = file.Path;
+            var key = new CompositeKey();
+            key.AddUserKey(new KcpPassword("0"));
+            var db = new PwDatabase();
+            db.New(ci, key);
+            var initialEnitiesCount = db.RootGroup.GetEntriesCount(true);
+            Assert.AreNotEqual(0, initialEnitiesCount);
+            db.Save(null);
+            db.Close();
+            Assert.IsNull(db.RootGroup);
+            db = new PwDatabase();
+            db.Open(ci, key, null);
+            Assert.AreEqual(initialEnitiesCount, db.RootGroup.GetEntriesCount(true));
         }
     }
 }
